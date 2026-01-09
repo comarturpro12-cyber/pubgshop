@@ -3,157 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon Profile</title>
+    <title>Xenon PUBG</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* БЕРЕМ ТВОЙ СТИЛЬ ИЗ БАЗЫ */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
-        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; }
         
-        @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
-        .container { padding: 16px; }
-        
-        /* ШАПКА КАК В МАГАЗИНЕ */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; backdrop-filter: blur(10px); }
-        .user-box { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 45px; height: 45px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 20px; color: #fff; text-transform: uppercase; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
-        .user-meta div:first-child { font-weight: 600; font-size: 15px; } 
-        .user-meta div:last-child { font-size: 11px; color: var(--gray); }
+        :root { --bg: #050505; --card: #0f0f11; --accent: #f59e0b; --text: #ffffff; }
 
-        /* ЗАГОЛОВОК */
-        .hero { text-align: center; margin-bottom: 30px; }
-        .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 38px; margin: 0; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
-
-        /* КАРТОЧКИ СТАТИСТИКИ */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .stat-card { 
-            background: var(--card); border: 1px solid var(--border); 
-            border-radius: 16px; padding: 20px; text-align: center; 
-            position: relative; overflow: hidden; 
-        }
-        
-        .stat-value { 
-            font-family: 'Rajdhani', sans-serif; font-size: 28px; 
-            font-weight: 700; color: #fff; margin-bottom: 5px; 
-        }
-        .stat-label { font-size: 11px; color: var(--gray); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
-        
-        /* Широкая карточка для статуса */
-        .full-width { grid-column: span 2; background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
-        
-        .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; }
-
-        .rank-badge {
-            display: inline-block; padding: 5px 10px; border-radius: 6px; 
-            font-size: 11px; font-weight: bold; background: #222; 
-            border: 1px solid #444; margin-top: 10px; color: #aaa;
+        body { 
+            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column;
+            background-image: radial-gradient(circle at 50% 0%, #451a03 0%, #000000 70%); /* Оранжевая дымка для PUBG */
         }
 
-        .footer { text-align: center; margin-top: 40px; font-size: 11px; color: #444; }
+        .container { 
+            flex: 1; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; padding: 20px; text-align: center;
+        }
+
+        /* АНИМАЦИЯ ЗАМКА/ЧАСОВ */
+        .icon-box {
+            width: 80px; height: 80px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 25px;
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+            animation: pulse 2s infinite;
+        }
+        .icon-symbol { font-size: 30px; }
+
+        h1 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 32px; margin: 0 0 10px 0;
+            text-transform: uppercase; letter-spacing: 2px;
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        p { color: #9ca3af; font-size: 14px; line-height: 1.6; max-width: 300px; margin: 0 auto 30px auto; }
+
+        .status-badge {
+            background: #222; border: 1px solid #333;
+            padding: 8px 16px; border-radius: 20px;
+            font-size: 12px; color: #666; font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .status-badge span { color: var(--accent); font-weight: bold; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); transform: scale(1); }
+            70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); transform: scale(1); }
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            padding: 12px 30px;
+            background: transparent; border: 1px solid #333;
+            color: #666; border-radius: 12px; cursor: pointer;
+            font-size: 12px; font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <div class="header">
-            <div class="user-box">
-                <div class="avatar" id="avatar">X</div>
-                <div class="user-meta">
-                    <div id="username">Guest</div>
-                    <div id="userid">Loading...</div>
-                </div>
-            </div>
-            <div style="text-align: right;">
-                <div style="font-size: 20px;">👤</div>
-            </div>
+        <div class="icon-box">
+            <div class="icon-symbol">⏳</div>
         </div>
 
-        <div class="hero">
-            <h1>PROFILE</h1>
-            <p>Личный кабинет Xenon</p>
+        <h1>PUBG MOBILE</h1>
+        <p>
+            Раздел находится в разработке.<br>
+            Мы обновляем офсеты под новый патч, чтобы гарантировать <b>Safe & Undetected</b> геймплей.
+        </p>
+
+        <div class="status-badge">
+            Status: <span>COMING SOON</span>
         </div>
 
-        <div class="stats-grid">
-            
-            <div class="stat-card">
-                <div class="stat-value" id="val-buys">0</div>
-                <div class="stat-label">Покупок</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-value" id="val-spent">0₽</div>
-                <div class="stat-label">Потрачено</div>
-            </div>
+        <button class="back-btn" onclick="Telegram.WebApp.close()">ЗАКРЫТЬ</button>
 
-            <div class="stat-card full-width">
-                <div class="stat-label" style="margin-bottom: 5px;">Ваш статус</div>
-                <div class="stat-value" id="val-status" style="font-size: 32px;">NOVICE</div>
-                <div id="rank-badge-container"></div>
-            </div>
-            
-        </div>
-
-        <div class="footer">XENON SOFTWARE © 2026</div>
     </div>
 
-<script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    
-    // 1. ЗАПОЛНЯЕМ ИМЯ И ID
-    function initProfile() {
-        const user = tg.initDataUnsafe.user;
-        if (user) {
-            document.getElementById('username').innerText = user.first_name || "User";
-            document.getElementById('userid').innerText = `ID: ${user.id}`;
-            const initial = user.first_name ? user.first_name[0] : 'X';
-            document.getElementById('avatar').innerText = initial.toUpperCase();
-        }
-    }
-    
-    // 2. ЗАПОЛНЯЕМ ЦИФРЫ (ИЗ ССЫЛКИ ОТ БОТА)
-    function loadStats() {
-        const urlParams = new URLSearchParams(window.location.search);
-        
-        const buys = parseInt(urlParams.get('buys')) || 0;
-        const spent = parseInt(urlParams.get('spent')) || 0;
-
-        document.getElementById('val-buys').innerText = buys;
-        document.getElementById('val-spent').innerText = spent + '₽';
-
-        // Логика статуса
-        const statusEl = document.getElementById('val-status');
-        const badgeContainer = document.getElementById('rank-badge-container');
-        
-        let statusText = "NOVICE";
-        let badgeColor = "#aaa";
-
-        if (buys >= 1) {
-            statusText = "CLIENT";
-            statusEl.style.color = "#3b82f6"; // Синий
-            badgeColor = "#3b82f6";
-        }
-        if (buys >= 3) {
-            statusText = "LEGEND";
-            statusEl.classList.add("rgb-text"); // Включаем RGB анимацию
-            badgeColor = "gold";
-        }
-
-        statusEl.innerText = statusText;
-        
-        if (buys > 0) {
-             badgeContainer.innerHTML = `<span class="rank-badge" style="border-color:${badgeColor}; color:${badgeColor}">VERIFIED USER</span>`;
-        }
-    }
-
-    initProfile();
-    loadStats();
-
-</script>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.MainButton.hide(); // Прячем кнопку покупки
+    </script>
 </body>
 </html>
