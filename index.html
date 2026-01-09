@@ -3,44 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon PUBG</title>
+    <title>Xenon Profile</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* Те же стили, только оранжевый акцент */
+        /* БЕРЕМ ТВОЙ СТИЛЬ ИЗ БАЗЫ */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
-        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #f59e0b; --text: #ffffff; --gray: #9ca3af; }
+        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; }
+        
         @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes border-rgb { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } 100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } }
-        .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; font-weight: 800; text-transform: uppercase; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #451a03 0%, #000000 70%); }
-        .container { padding: 16px; padding-bottom: 80px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; backdrop-filter: blur(10px); }
+        
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
+        .container { padding: 16px; }
+        
+        /* ШАПКА КАК В МАГАЗИНЕ */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; backdrop-filter: blur(10px); }
         .user-box { display: flex; align-items: center; gap: 10px; }
-        .avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff; text-transform: uppercase; }
-        .user-meta div:first-child { font-weight: 600; font-size: 14px; } .user-meta div:last-child { font-size: 11px; color: var(--gray); }
-        .hero { text-align: center; margin: 25px 0; }
-        .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0; text-transform: uppercase; background: linear-gradient(90deg, #f59e0b, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; }
-        .nav-tab.active { background: linear-gradient(90deg, #f59e0b, #d97706); color: black; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
-        .section { display: none; animation: fadeIn 0.4s ease; } .section.active { display: block; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s; }
-        .card.selected { animation: border-rgb 3s linear infinite; transform: scale(1.02); background: rgba(255,255,255,0.02); }
-        .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
-        .card-body { padding: 16px; }
-        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
-        .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
-        .add-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .card.selected .add-btn { background: var(--accent); color: black; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); font-weight: 800; }
-        .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
-        .info-block { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; }
+        .avatar { width: 45px; height: 45px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 20px; color: #fff; text-transform: uppercase; box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .user-meta div:first-child { font-weight: 600; font-size: 15px; } 
+        .user-meta div:last-child { font-size: 11px; color: var(--gray); }
+
+        /* ЗАГОЛОВОК */
+        .hero { text-align: center; margin-bottom: 30px; }
+        .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 38px; margin: 0; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
+
+        /* КАРТОЧКИ СТАТИСТИКИ */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .stat-card { 
+            background: var(--card); border: 1px solid var(--border); 
+            border-radius: 16px; padding: 20px; text-align: center; 
+            position: relative; overflow: hidden; 
+        }
+        
+        .stat-value { 
+            font-family: 'Rajdhani', sans-serif; font-size: 28px; 
+            font-weight: 700; color: #fff; margin-bottom: 5px; 
+        }
+        .stat-label { font-size: 11px; color: var(--gray); text-transform: uppercase; font-weight: 600; letter-spacing: 1px; }
+        
+        /* Широкая карточка для статуса */
+        .full-width { grid-column: span 2; background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2); }
+        
+        .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; }
+
+        .rank-badge {
+            display: inline-block; padding: 5px 10px; border-radius: 6px; 
+            font-size: 11px; font-weight: bold; background: #222; 
+            border: 1px solid #444; margin-top: 10px; color: #aaa;
+        }
+
+        .footer { text-align: center; margin-top: 40px; font-size: 11px; color: #444; }
     </style>
 </head>
 <body>
+
     <div class="container">
+        
         <div class="header">
             <div class="user-box">
                 <div class="avatar" id="avatar">X</div>
@@ -50,25 +69,43 @@
                 </div>
             </div>
             <div style="text-align: right;">
-                <div style="color:#f59e0b; font-size:12px; font-weight:bold;">● Online</div>
-                <div style="font-size:10px; color:#666;">Xenon PUBG</div>
+                <div style="font-size: 20px;">👤</div>
             </div>
         </div>
-        <div class="hero"><h1>PUBG</h1><p>Dominator Hack</p></div>
-        <div class="nav-tabs">
-            <div class="nav-tab active" onclick="switchTab('shop')">МАГАЗИН</div>
-            <div class="nav-tab" onclick="switchTab('features')">ФУНКЦИОНАЛ</div>
+
+        <div class="hero">
+            <h1>PROFILE</h1>
+            <p>Личный кабинет Xenon</p>
         </div>
-        <div id="shop" class="section active"><div class="grid" id="grid"></div></div>
-        <div id="features" class="section">
-            <div class="info-block"><div style="font-weight:bold;color:#fff;">ℹ SAFE</div><div style="font-size:12px;color:#fbbf24;">Версия безопасна для основы.</div></div>
+
+        <div class="stats-grid">
+            
+            <div class="stat-card">
+                <div class="stat-value" id="val-buys">0</div>
+                <div class="stat-label">Покупок</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value" id="val-spent">0₽</div>
+                <div class="stat-label">Потрачено</div>
+            </div>
+
+            <div class="stat-card full-width">
+                <div class="stat-label" style="margin-bottom: 5px;">Ваш статус</div>
+                <div class="stat-value" id="val-status" style="font-size: 32px;">NOVICE</div>
+                <div id="rank-badge-container"></div>
+            </div>
+            
         </div>
+
+        <div class="footer">XENON SOFTWARE © 2026</div>
     </div>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-
+    
+    // 1. ЗАПОЛНЯЕМ ИМЯ И ID
     function initProfile() {
         const user = tg.initDataUnsafe.user;
         if (user) {
@@ -76,78 +113,47 @@
             document.getElementById('userid').innerText = `ID: ${user.id}`;
             const initial = user.first_name ? user.first_name[0] : 'X';
             document.getElementById('avatar').innerText = initial.toUpperCase();
-        } else {
-            document.getElementById('username').innerText = "Guest Mode";
-            document.getElementById('userid').innerText = "Open via Telegram";
         }
     }
+    
+    // 2. ЗАПОЛНЯЕМ ЦИФРЫ (ИЗ ССЫЛКИ ОТ БОТА)
+    function loadStats() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        const buys = parseInt(urlParams.get('buys')) || 0;
+        const spent = parseInt(urlParams.get('spent')) || 0;
+
+        document.getElementById('val-buys').innerText = buys;
+        document.getElementById('val-spent').innerText = spent + '₽';
+
+        // Логика статуса
+        const statusEl = document.getElementById('val-status');
+        const badgeContainer = document.getElementById('rank-badge-container');
+        
+        let statusText = "NOVICE";
+        let badgeColor = "#aaa";
+
+        if (buys >= 1) {
+            statusText = "CLIENT";
+            statusEl.style.color = "#3b82f6"; // Синий
+            badgeColor = "#3b82f6";
+        }
+        if (buys >= 3) {
+            statusText = "LEGEND";
+            statusEl.classList.add("rgb-text"); // Включаем RGB анимацию
+            badgeColor = "gold";
+        }
+
+        statusEl.innerText = statusText;
+        
+        if (buys > 0) {
+             badgeContainer.innerHTML = `<span class="rank-badge" style="border-color:${badgeColor}; color:${badgeColor}">VERIFIED USER</span>`;
+        }
+    }
+
     initProfile();
-    setTimeout(initProfile, 100);
+    loadStats();
 
-    const products = [
-        { id: 1, type: 'safe', name: 'PUBG Dominator Pack', price: 550, desc: 'Safe functional. No Recoil, ESP. <span class="rgb-text">НАВСЕГДА</span>.', img: 'pubg_safe.png', badge: 'SAFE' },
-        { id: 2, type: 'rage', name: 'PUBG Rage Conqueror', price: 990, desc: 'Magic Bullet, iPad View. <span class="rgb-text">НАВСЕГДА</span>.', img: 'pubg_rage.png', badge: 'RAGE' }
-    ];
-
-    let selected = null;
-
-    function renderProducts() {
-        const grid = document.getElementById('grid');
-        grid.innerHTML = '';
-        products.forEach(p => {
-            const isSel = selected === p.id;
-            const div = document.createElement('div');
-            div.className = `card ${isSel ? 'selected' : ''}`;
-            div.onclick = () => select(p);
-            div.innerHTML = `
-                <div class="badge">${p.badge}</div>
-                <img src="${p.img}" class="card-img" alt="${p.name}">
-                <div class="card-body">
-                    <div class="card-title">${p.name}</div>
-                    <div class="card-desc">${p.desc}</div>
-                    <div class="card-footer">
-                        <div class="price">${p.price}₽</div>
-                        <div class="add-btn">${isSel ? 'ВЫБРАНО' : 'КУПИТЬ'}</div>
-                    </div>
-                </div>
-            `;
-            grid.appendChild(div);
-        });
-    }
-
-    function select(p) {
-        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        if (selected === p.id) {
-            selected = null;
-            tg.MainButton.hide();
-        } else {
-            selected = p.id;
-            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()}`;
-            tg.MainButton.color = "#f59e0b";
-            tg.MainButton.textColor = "#000";
-            tg.MainButton.show();
-        }
-        renderProducts();
-    }
-
-    tg.MainButton.onClick(() => {
-        const p = products.find(x => x.id === selected);
-        if (p) {
-            tg.sendData(JSON.stringify(p));
-            setTimeout(() => { tg.close(); }, 100);
-        }
-    });
-
-    window.switchTab = function(tabName) {
-        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
-        const btnIndex = tabName === 'shop' ? 0 : 1;
-        document.querySelectorAll('.nav-tab')[btnIndex].classList.add('active');
-    }
-
-    renderProducts();
 </script>
 </body>
 </html>
