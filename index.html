@@ -3,96 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon PUBG</title>
+    <title>Xenon PUBG Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
         
-        :root { --bg: #050505; --card: #0f0f11; --accent: #f59e0b; --text: #ffffff; }
-
+        :root { 
+            --bg: #050505; 
+            --card: #141414; 
+            --border: #27272a; 
+            --accent: #f59e0b; /* Оранжевый PUBG */
+            --text: #ffffff; 
+            --gray: #9ca3af; 
+        }
+        
         body { 
-            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
-            margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column;
-            background-image: radial-gradient(circle at 50% 0%, #451a03 0%, #000000 70%); /* Оранжевая дымка для PUBG */
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; min-height: 100vh;
+            /* Темный фон с оранжевым свечением сверху */
+            background-image: radial-gradient(circle at 50% 0%, #451a03 0%, #000000 60%);
+            background-attachment: fixed;
         }
-
-        .container { 
-            flex: 1; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; padding: 20px; text-align: center;
+        
+        .container { padding: 16px; padding-bottom: 90px; }
+        
+        /* HEADER */
+        .header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 25px; padding: 12px; 
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); 
+            border-radius: 12px; backdrop-filter: blur(10px); 
         }
-
-        /* АНИМАЦИЯ ЗАМКА/ЧАСОВ */
-        .icon-box {
-            width: 80px; height: 80px;
-            background: rgba(245, 158, 11, 0.1);
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 25px;
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-            animation: pulse 2s infinite;
+        .user-box { display: flex; align-items: center; gap: 10px; }
+        .avatar { 
+            width: 35px; height: 35px; border-radius: 8px; 
+            background: var(--accent); color: #000; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 16px;
         }
-        .icon-symbol { font-size: 30px; }
+        .app-title { font-size: 12px; color: var(--accent); font-weight: 800; letter-spacing: 1px; }
 
-        h1 {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 32px; margin: 0 0 10px 0;
+        /* HERO TEXT */
+        .hero { text-align: center; margin-bottom: 30px; }
+        .hero h1 { 
+            font-family: 'Rajdhani', sans-serif; font-size: 36px; margin: 0; 
             text-transform: uppercase; letter-spacing: 2px;
             background: linear-gradient(90deg, #f59e0b, #fbbf24);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .hero p { font-size: 12px; color: var(--gray); margin-top: 5px; }
 
-        p { color: #9ca3af; font-size: 14px; line-height: 1.6; max-width: 300px; margin: 0 auto 30px auto; }
-
-        .status-badge {
-            background: #222; border: 1px solid #333;
-            padding: 8px 16px; border-radius: 20px;
-            font-size: 12px; color: #666; font-family: 'Rajdhani', sans-serif;
-            text-transform: uppercase; letter-spacing: 1px;
+        /* ТОВАРЫ (GRID) */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
+        .card { 
+            background: rgba(20, 20, 20, 0.8); 
+            border: 1px solid var(--border); border-radius: 16px; 
+            overflow: hidden; transition: 0.2s; position: relative;
         }
-        .status-badge span { color: var(--accent); font-weight: bold; }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); transform: scale(1); }
-            70% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); transform: scale(1.05); }
-            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); transform: scale(1); }
+        .card:active { transform: scale(0.98); border-color: var(--accent); }
+        
+        .card-img { 
+            width: 100%; height: 160px; object-fit: cover; 
+            background: #000; border-bottom: 1px solid var(--border);
+        }
+        
+        .card-body { padding: 15px; }
+        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
+        .card-desc { font-size: 12px; color: var(--gray); margin-bottom: 15px; line-height: 1.4; }
+        
+        .badge { 
+            position: absolute; top: 10px; right: 10px; 
+            background: rgba(0,0,0,0.8); color: var(--accent); 
+            padding: 4px 8px; border-radius: 6px; 
+            font-size: 10px; font-weight: bold; border: 1px solid var(--accent); 
         }
 
-        .back-btn {
-            margin-top: 40px;
-            padding: 12px 30px;
-            background: transparent; border: 1px solid #333;
-            color: #666; border-radius: 12px; cursor: pointer;
-            font-size: 12px; font-weight: 600;
+        .go-btn { 
+            padding: 10px; width: 100%; text-align: center; box-sizing: border-box;
+            background: rgba(245, 158, 11, 0.1); border: 1px solid var(--accent); 
+            border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--accent); 
         }
+
+        /* ДЕТАЛЬНЫЙ ПРОСМОТР */
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+        
+        .detail-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .detail-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+        .detail-desc { font-size: 13px; color: #d1d5db; line-height: 1.6; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+
+        .section-title { font-size: 12px; color: var(--gray); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ПЛАНЫ (Срок действия) */
+        .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .plan-card { 
+            background: var(--card); border: 1px solid var(--border); padding: 15px; 
+            border-radius: 10px; text-align: center; cursor: pointer; transition: 0.2s; 
+        }
+        .plan-card.active { border-color: var(--accent); background: rgba(245, 158, 11, 0.15); }
+        .plan-price { font-size: 16px; font-weight: 800; color: #fff; margin-top: 5px; font-family: 'Rajdhani', sans-serif; }
+        .plan-label { font-size: 12px; color: var(--gray); font-weight: 600; }
+        
+        .full-width { grid-column: span 2; }
+
+        /* КНОПКА НАЗАД */
+        .back-btn { 
+            display: inline-block; padding: 10px 30px; 
+            background: #111; border: 1px solid #333; border-radius: 20px; 
+            font-size: 12px; color: #888; cursor: pointer; margin-top: 10px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
     </style>
 </head>
 <body>
 
     <div class="container">
         
-        <div class="icon-box">
-            <div class="icon-symbol">⏳</div>
+        <div id="shop-view" class="view active">
+            <div class="header">
+                <div class="user-box">
+                    <div class="avatar" id="avatar">X</div>
+                    <div style="font-size: 13px; font-weight: 600;">
+                        <span id="username">Guest</span>
+                        <div style="font-size: 10px; color: var(--gray); font-weight: 400;">ID: <span id="userid">...</span></div>
+                    </div>
+                </div>
+                <div class="app-title">PUBG STORE</div>
+            </div>
+
+            <div class="hero">
+                <h1>XENON PUBG</h1>
+                <p>Safe & Undetected Software</p>
+            </div>
+
+            <div class="grid" id="products-grid">
+                </div>
         </div>
 
-        <h1>PUBG MOBILE</h1>
-        <p>
-            Раздел находится в разработке.<br>
-            Мы обновляем офсеты под новый патч, чтобы гарантировать <b>Safe & Undetected</b> геймплей.
-        </p>
+        <div id="detail-view" class="view">
+            <img id="d-img" src="" class="detail-img">
+            <div id="d-title" class="detail-title"></div>
+            <div id="d-desc" class="detail-desc"></div>
+            
+            <div class="section-title">ВЫБЕРИТЕ СРОК ПОДПИСКИ</div>
+            <div class="plans-grid" id="plans-grid"></div>
 
-        <div class="status-badge">
-            Status: <span>COMING SOON</span>
+            <div style="text-align: center;">
+                <div class="back-btn" onclick="goBack()">НАЗАД В МАГАЗИН</div>
+            </div>
         </div>
-
-        <button class="back-btn" onclick="Telegram.WebApp.close()">ЗАКРЫТЬ</button>
 
     </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.MainButton.hide(); // Прячем кнопку покупки
-    </script>
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+
+    // === 1. ПОЛУЧЕНИЕ ДАННЫХ ЮЗЕРА ===
+    // Берем данные из URL (как у тебя в боте настроено) или из WebApp
+    function initUser() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const nameFromUrl = urlParams.get('name');
+        const uidFromUrl = urlParams.get('uid');
+
+        if (nameFromUrl) {
+            document.getElementById('username').innerText = nameFromUrl;
+            document.getElementById('userid').innerText = uidFromUrl;
+            document.getElementById('avatar').innerText = nameFromUrl[0].toUpperCase();
+        } else {
+            const user = tg.initDataUnsafe.user;
+            if (user) {
+                document.getElementById('username').innerText = user.first_name;
+                document.getElementById('userid').innerText = user.id;
+                document.getElementById('avatar').innerText = user.first_name[0].toUpperCase();
+            }
+        }
+    }
+    initUser();
+
+    // === 2. БАЗА ТОВАРОВ PUBG ===
+    const products = [
+        {
+            id: 'pubg_android',
+            name: 'Xenon PUBG Android',
+            badge: 'NO ROOT',
+            // Можешь заменить ссылку на картинку на свою
+            img: 'https://wallpapers.com/images/hd/pubg-mobile-4k-android-s7k54j69o902k4y5.jpg', 
+            short_desc: 'Приватный чит для Android. Работает БЕЗ Рут прав. Безопасная установка.',
+            full_desc: `
+                <b>ВЕРСИЯ: ANDROID NO ROOT</b><br><br>
+                Идеальное решение для легитной игры. Установка через виртуальное пространство или патчер.
+                <br><br>
+                🛡 <b>Функционал:</b>
+                <br>• ESP Box (Квадраты)
+                <br>• ESP Line (Линии)
+                <br>• Health Bar (Здоровье)
+                <br>• Loot ESP (Предметы)
+                <br>• Safe Aimbot (Безопасный аим)
+            `,
+            plans: [
+                { label: '7 Дней', price: 250 },
+                { label: '30 Дней', price: 500 },
+                { label: '90 Дней', price: 900 },
+                { label: 'НАВСЕГДА', price: 1500 }
+            ]
+        },
+        {
+            id: 'pubg_ios',
+            name: 'Xenon PUBG iOS',
+            badge: 'PRIVATE',
+            // Можешь заменить ссылку на картинку на свою
+            img: 'https://wallpapers.com/images/hd/pubg-loading-screen-4k-uhd-mobile-wallpaper-u2s7y2d3v4w5x6z1.jpg',
+            short_desc: 'Премиум версия для iPhone/iPad. Без Jailbreak. Максимальная защита.',
+            full_desc: `
+                <b>ВЕРСИЯ: iOS NON-JAILBROKEN</b><br><br>
+                Самый надежный софт на рынке для iOS. Установка через eSign/Scarlet (сертификат в комплекте).
+                <br><br>
+                💎 <b>Функционал:</b>
+                <br>• Touch Aimbot (Аим по касанию)
+                <br>• Enemy ESP (Скелеты)
+                <br>• Radar Hack
+                <br>• Anti-Stream (Скрыт на записи)
+            `,
+            plans: [
+                { label: '7 Дней', price: 400 },
+                { label: '30 Дней', price: 800 },
+                { label: '90 Дней', price: 1200 },
+                { label: 'НАВСЕГДА', price: 2000 }
+            ]
+        }
+    ];
+
+    let currentProduct = null;
+    let selectedPlan = null;
+
+    // === 3. ОТРИСОВКА ТОВАРОВ ===
+    function renderShop() {
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = '';
+        products.forEach(p => {
+            const el = document.createElement('div');
+            el.className = 'card';
+            el.innerHTML = `
+                <div class="badge">${p.badge}</div>
+                <img src="${p.img}" class="card-img">
+                <div class="card-body">
+                    <div class="card-title">${p.name}</div>
+                    <div class="card-desc">${p.short_desc}</div>
+                    <div class="go-btn" onclick="openDetail('${p.id}')">ВЫБРАТЬ • ОТ ${p.plans[0].price}₽</div>
+                </div>
+            `;
+            grid.appendChild(el);
+        });
+    }
+
+    // === 4. ЛОГИКА ПЕРЕХОДОВ И ПОКУПКИ ===
+    function openDetail(id) {
+        currentProduct = products.find(x => x.id === id);
+        selectedPlan = null;
+        tg.MainButton.hide();
+
+        document.getElementById('d-img').src = currentProduct.img;
+        document.getElementById('d-title').innerText = currentProduct.name;
+        document.getElementById('d-desc').innerHTML = currentProduct.full_desc;
+
+        const plansContainer = document.getElementById('plans-grid');
+        plansContainer.innerHTML = '';
+        
+        currentProduct.plans.forEach((plan, index) => {
+            const btn = document.createElement('div');
+            btn.className = `plan-card ${index === 3 ? 'full-width' : ''}`; // Последний элемент на всю ширину
+            btn.onclick = () => selectPlan(index);
+            btn.id = `plan-${index}`;
+            btn.innerHTML = `
+                <div class="plan-label">${plan.label}</div>
+                <div class="plan-price">${plan.price}₽</div>
+            `;
+            plansContainer.appendChild(btn);
+        });
+
+        document.getElementById('shop-view').classList.remove('active');
+        document.getElementById('detail-view').classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function selectPlan(index) {
+        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        
+        document.querySelectorAll('.plan-card').forEach(el => el.classList.remove('active'));
+        document.getElementById(`plan-${index}`).classList.add('active');
+        
+        selectedPlan = currentProduct.plans[index];
+        
+        // Кнопка Телеграма
+        tg.MainButton.text = `КУПИТЬ ЗА ${selectedPlan.price}₽`;
+        tg.MainButton.color = "#f59e0b"; // Оранжевый цвет
+        tg.MainButton.textColor = "#000000";
+        tg.MainButton.show();
+    }
+
+    function goBack() {
+        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        document.getElementById('detail-view').classList.remove('active');
+        document.getElementById('shop-view').classList.add('active');
+        tg.MainButton.hide();
+        currentProduct = null;
+        selectedPlan = null;
+    }
+
+    // Обработка клика по главной кнопке (SEND DATA)
+    tg.MainButton.onClick(() => {
+        if (currentProduct && selectedPlan) {
+            const finalData = {
+                // Бот ждет именно 'name' и 'price', не меняй эти ключи!
+                name: `${currentProduct.name} (${selectedPlan.label})`,
+                price: selectedPlan.price
+            };
+            tg.sendData(JSON.stringify(finalData));
+            tg.close();
+        }
+    });
+    
+    // Кнопка "Назад" (физическая/системная) в Андроиде
+    tg.BackButton.onClick(goBack);
+
+    // Запуск
+    renderShop();
+
+</script>
 </body>
 </html>
